@@ -82,9 +82,8 @@ def home():
 def page_not_found(e):
     return redirect('/')
 
+    # TO'G'RI VARIANT:
 if __name__ == '__main__':
-    if __name__ == '__main__':
-    # PORT muhit o'zgaruvchisini o'qiydi, agar topilmasa standart 5000 ni oladi
+    import os
     port = int(os.environ.get("PORT", 5000))
-    # host="0.0.0.0" saytni tashqi dunyoga ochish uchun shart
-    app.run(host="0.0.0.0", port=port, debug=False)
+    app.run(host="0.0.0.0", port=port)
