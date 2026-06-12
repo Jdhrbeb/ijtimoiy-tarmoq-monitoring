@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Information Control</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; padding-top: 50px; }
+        .main-card { border: none; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); background: rgba(255, 255, 255, 0.95); }
+        .header-bg { background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); color: white; border-radius: 24px 24px 0 0; padding: 35px; text-align: center; }
+        .custom-input { border: 2px solid #e2e8f0; border-radius: 14px; padding: 12px; transition: all 0.2s; }
+        .custom-input:focus { border-color: #4f46e5; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        .btn-analyze { background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; border-radius: 14px; font-weight: 600; padding: 14px; color: white; transition: transform 0.2s; }
+        .btn-analyze:hover { transform: translateY(-2px); color: white; }
+    </style>
+</head>
+<body>
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card main-card">
+                    <div class="header-bg">
+                        <span class="badge bg-white/20 text-white mb-2 px-3 py-1 rounded-pill" style="backdrop-filter: blur(5px);">
+                            <i class="fa-solid fa-brain me-1"></i> Multimodal NLP & Vision Prototip
+                        </span>
+                        <h3 class="fw-bold mb-0">Axborot Oqimini Intellektual Nazorat Qilish</h3>
+                        <p class="small opacity-75 mt-1 mb-0">Ijtimoiy tarmoqlardagi matn, rasm va videolarni tahlil qilish tizimi</p>
+                    </div>
+                    <div class="card-body p-4 p-md-5">
+                        
+                        <form action="/" method="POST" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-secondary">
+                                    <i class="fa-regular fa-comment-dots me-1 text-primary"></i> Tahlil qilinuvchi matn yoki post mazmuni:
+                                </label>
+                                <textarea class="form-control custom-input" name="text" rows="3" placeholder="Ijtimoiy tarmoqdan olingan shubhali yoki vahimali xabarni bura kiriting..."></textarea>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-secondary">
+                                    <i class="fa-regular fa-file-image me-1 text-primary"></i> Yoki Multimedia faylini yuklang (Rasm yoki Video):
+                                </label>
+                                <input class="form-control custom-input" type="file" name="file" accept="image/*,video/*">
+                                <div class="form-text text-muted">Tizim vizual ob'ektlarni neyron tarmoq orqali skanerlaydi.</div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-analyze btn-lg">
+                                    <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Algoritmik Tahlilni Boshlash
+                                </button>
+                            </div>
+                        </form>
+
+                        {% if result %}
+                        <div class="mt-5 pt-4 border-top">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-square-poll-vertical text-primary me-2"></i> Eksperiment Natijasi</h5>
+                                <a href="/" class="btn btn-sm btn-outline-secondary rounded-pill px-3"><i class="fa-solid fa-rotate-left me-1"></i> Yangilash</a>
+                            </div>
+
+                            <div class="mb-4">
+                                <span class="text-muted small d-block mb-1">Tekshirilgan ob'ekt:</span>
+                                <div class="p-3 bg-light rounded-3 border-start border-4 border-primary">
+                                    <p class="mb-0 text-dark" style="font-style: italic;">"{{ original_text }}"</p>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-5">
+                                    <span class="text-muted small d-block mb-1">Klassifikatsiya:</span>
+                                    <div class="alert alert-{{ color }} text-center fw-bold rounded-3 py-3 m-0 shadow-sm">
+                                        {% if color == 'danger' %}
+                                            <i class="fa-solid fa-triangle-exclamation fa-bounce me-2"></i>
+                                        {% else %}
+                                            <i class="fa-solid fa-circle-check fa-pulse me-2"></i>
+                                        {% endif %}
+                                        {{ result }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-7">
+                                    <span class="text-muted small d-block mb-1">Samarali teskari aloqa mexanizmi:</span>
+                                    <div class="p-3 bg-warning-subtle text-dark border border-warning rounded-3 shadow-sm" style="min-height: 62px;">
+                                        <p class="mb-0 small" style="line-height: 1.5;"><strong>Tizim tavsiyasi:</strong> {{ feedback }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0 py-3 text-center text-muted" style="font-size: 11px; letter-spacing: 0.5px;">
+                        SAMBHRAM UNIVERSITY • DIPLOM LOYIHASI © 2026
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
